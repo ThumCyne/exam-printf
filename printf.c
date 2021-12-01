@@ -1,6 +1,7 @@
 #include <stdarg.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <limits.h>
 
 int count_chars;
 
@@ -17,8 +18,7 @@ int ft_printf(const char *fmt, ...)
 	va_list ap;
 	int i;
 	int slen;
-	int d;
-	unsigned int x;
+	long long nbr;
 	char *str;
 
 	va_start(ap, fmt);
@@ -33,21 +33,18 @@ int ft_printf(const char *fmt, ...)
 				i++;
 			if (fmt[i] == 'd')
 			{
-				d = va_arg(ap, int);
-				if (d < 0)
+				nbr = va_arg(ap, int);
+				if (nbr< 0)
 				{
-					unsigned int d1;
-					d1 = -d;
+					nbr = -nbr;
 					count_chars += write(1, "-", 1);
-					ft_putnbr(d1, 10, "0123456789");
 				}
-				else
-					ft_putnbr(d, 10, "0123456789");
+				ft_putnbr(nbr, 10, "0123456789");
 			}
 			else if (fmt[i] == 'x')
 			{
-				x = va_arg(ap, unsigned int);
-				ft_putnbr(x, 16, "0123456789abcdef");
+				nbr = va_arg(ap, unsigned int);
+				ft_putnbr(nbr, 16, "0123456789abcdef");
 			}
 			else if (fmt[i] == 's')
 			{
@@ -78,7 +75,8 @@ int main(void)
 {
 	int ret1, ret2;
 
-	printf("%d\n", -2147483649);	
-	ft_printf("%d\n", -2147483649);
+	ret1 = printf("%d\n", INT_MAX);	
+	ret2 = ft_printf("%d\n", INT_MAX);
+	printf("ret1 %d  ret2 %d \n", ret1, ret2);
 	return 0;
 }
